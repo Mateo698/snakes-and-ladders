@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 public class Square {
 	private int row;
 	private int col;
@@ -9,7 +11,7 @@ public class Square {
 	private Square initLadder;
 	private Square endLadder;
 	private char snakeLetter;
-	private char ladderLetter;
+	private int ladderNum;
 	
 	public Square(int row, int col) {
 		this.row = row;
@@ -20,9 +22,23 @@ public class Square {
 		setInitLadder(null);
 		setEndLadder(null);
 		snakeLetter = 0;
-		ladderLetter = 0;
+		ladderNum = 0;
 	}
-
+	
+	public ArrayList<Square> getSquaresInARow(ArrayList<Square> a,int selectedRow){
+		if(next != null) {
+			if(next.getRow() == selectedRow) {
+				a.add(next);
+				return next.getSquaresInARow(a, selectedRow);
+			}
+			else {
+				return next.getSquaresInARow(a, selectedRow);
+			}	
+		}
+		else {
+			return a;
+		}
+	}
 	
 
 	public Square getInitSnake() {
@@ -65,12 +81,12 @@ public class Square {
 		this.snakeLetter = snakeLetter;
 	}
 
-	public char getLadderLetter() {
-		return ladderLetter;
+	public int getLadderLetter() {
+		return ladderNum;
 	}
 
-	public void setLadderLetter(char ladderLetter) {
-		this.ladderLetter = ladderLetter;
+	public void setLadderLetter(int ladderLetter) {
+		this.ladderNum = ladderLetter;
 	}
 
 

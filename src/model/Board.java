@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 public class Board {
 	private Square first;
 	private int rows;
@@ -15,6 +17,17 @@ public class Board {
 	public void createBoard() {
 		first = new Square(rows,0);
 		createNext(first);
+	}
+	
+	public void showBoard(int requestedRow) {
+		ArrayList<Square> singleRow = new ArrayList<Square>();
+		if(first.getRow()==requestedRow) {
+			singleRow.add(first);
+			singleRow = first.getSquaresInARow(singleRow, requestedRow);
+		}
+		else {
+			singleRow = first.getSquaresInARow(singleRow, requestedRow);
+		}
 	}
 	
 	public void createNext(Square prev) {
@@ -51,6 +64,8 @@ public class Board {
 			}
 		}
 	}
+	
+	
 
 	public Square getFirst() {
 		return first;
