@@ -2,7 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
-public class Square {
+public class Square implements Comparable<Square>{
 	private int row;
 	private int col;
 	private Square next;
@@ -43,6 +43,10 @@ public class Square {
 
 	public Square getInitSnake() {
 		return initSnake;
+	}
+	
+	public String getCords() {
+		return row + " " + col; 
 	}
 
 	public void setInitSnake(Square initSnake) {
@@ -123,6 +127,11 @@ public class Square {
 
 	public void setNext(Square next) {
 		this.next = next;
+	}
+
+	@Override
+	public int compareTo(Square o) {
+		return row-o.getRow();
 	}
 	
 	
