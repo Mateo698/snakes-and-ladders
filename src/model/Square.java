@@ -12,10 +12,12 @@ public class Square implements Comparable<Square>{
 	private Square endLadder;
 	private char snakeLetter;
 	private int ladderNum;
+	private int squareNum;
 	
-	public Square(int row, int col) {
+	public Square(int num,int row, int col) {
 		this.row = row;
 		this.col = col;
+		this.setSquareNum(num);
 		next = null;
 		setInitSnake(null);
 		setEndSnake(null);
@@ -132,6 +134,14 @@ public class Square implements Comparable<Square>{
 	@Override
 	public int compareTo(Square o) {
 		return row-o.getRow();
+	}
+
+	public int getSquareNum() {
+		return squareNum;
+	}
+
+	public void setSquareNum(int squareNum) {
+		this.squareNum = squareNum;
 	}
 	
 	

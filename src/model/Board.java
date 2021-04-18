@@ -16,14 +16,14 @@ public class Board {
 	}
 	
 	public void createBoard() {
-		first = new Square(rows-1,0);
+		first = new Square(1,rows-1,0);
 		createNext(first);
 	}
 	
 	public void showBoards() {
 		Square aux = first;
 		while(aux != null) {
-			System.out.println(aux.getCords());
+			System.out.println(aux.getSquareNum());
 			aux = aux.getNext();
 		}
 	}
@@ -33,58 +33,69 @@ public class Board {
 		if(first.getRow()==requestedRow) {
 			singleRow.add(first);
 			singleRow = first.getSquaresInARow(singleRow, requestedRow);
-			Collections.sort(singleRow);
-			for(int i=0;i<singleRow.size();i++) {
-				System.out.println(singleRow.get(i).getCords());
-			}
+			Collections.sort(singleRow,new Compare());
+			System.out.println(printRow(singleRow));
+			
 		}
 		else {
 			singleRow = first.getSquaresInARow(singleRow, requestedRow);
+			Collections.sort(singleRow,new Compare());
+			System.out.println(printRow(singleRow));
+			
+		}
+	}
+	
+	public void recursiveRows(int rows) {
+		if(rows==this.rows-1) {
+			showBoard(rows);
+		}
+		else {
+			showBoard(rows);
+			recursiveRows(rows+1);
+		}
+	}
+	
+	public String printRow(ArrayList<Square> a) {
+		if(a.size()==1) {
+			return "[ " + a.get(0).getSquareNum() + " ]"; 
+		}
+		else {
+			String x = "[ " + a.get(a.size()-1).getSquareNum() + " ]";
+			a.remove(a.size()-1);
+			return printRow(a) + x;
 		}
 	}
 	
 	public void createNext(Square prev) {
 		if(direction) {
 			if(prev.getCol()+1<cols) {
-				Square next = new Square(prev.getRow(),prev.getCol()+1);
+				Square next = new Square(prev.getSquareNum()+1,prev.getRow(),prev.getCol()+1);
 				prev.setNext(next);
-				System.out.println(next.getCords());
-				System.out.println(direction);
 				createNext(next);
 			}
 			else if((prev.getRow()==0 && prev.getCol()==0 && !direction) || (prev.getRow()==0 && prev.getCol()==cols-1 && direction)) {
 				//termina
 			}
 			else {
-				Square next = new Square(prev.getRow()-1,prev.getCol());
+				Square next = new Square(prev.getSquareNum()+1,prev.getRow()-1,prev.getCol());
 				prev.setNext(next);
-				System.out.println(next.getCords());
-				
 				direction = false;
-				System.out.println(direction);
-				
 				createNext(next);
 			}
 		}
 		else {
 			if(prev.getCol()-1>=0) {
-				Square next = new Square(prev.getRow(),prev.getCol()-1);
+				Square next = new Square(prev.getSquareNum()+1,prev.getRow(),prev.getCol()-1);
 				prev.setNext(next);
-				System.out.println(next.getCords());
-				System.out.println(direction);
 				createNext(next);
 			}
 			else if((prev.getRow()==0 && prev.getCol()==0 && !direction) || (prev.getRow()==0 && prev.getCol()==cols-1 && direction)) {
 				//termina
 			}
 			else {
-				Square next = new Square(prev.getRow()-1,prev.getCol());
+				Square next = new Square(prev.getSquareNum()+1,prev.getRow()-1,prev.getCol());
 				prev.setNext(next);
-				System.out.println(next.getCords());
-				
 				direction = true;
-				System.out.println(direction);
-				
 				createNext(next);
 			}
 		}
