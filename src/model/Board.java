@@ -8,11 +8,14 @@ public class Board {
 	private int rows;
 	private int cols;
 	private boolean direction;
+	private ArrayList<String> playersSymbol;
 	
 	public Board(int x,int y) {
+		playersSymbol = new ArrayList<>();
 		setRows(x);
 		setCols(y);
 		direction = true;
+		createBoard();
 	}
 	
 	public void createBoard() {
@@ -20,13 +23,24 @@ public class Board {
 		createNext(first);
 	}
 	
-	public void showBoards() {
-		Square aux = first;
-		while(aux != null) {
-			System.out.println(aux.getSquareNum());
-			aux = aux.getNext();
+	public void createLadders(int ladders) {
+		
+	}
+	
+	public void createSnakes(int snakes) {
+		
+	}
+	
+	public void setPlayers(String playersString) {
+		
+		if(playersString.length() == 1) {
+			playersSymbol.add(playersString);
+		}
+		else {
+			playersString.substring(0, playersString.length()-1);
 		}
 	}
+	
 	
 	public void showBoard(int requestedRow) {
 		ArrayList<Square> singleRow = new ArrayList<Square>();

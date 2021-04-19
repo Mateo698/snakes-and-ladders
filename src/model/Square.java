@@ -13,6 +13,7 @@ public class Square implements Comparable<Square>{
 	private char snakeLetter;
 	private int ladderNum;
 	private int squareNum;
+	private ArrayList<String> players;
 	
 	public Square(int num,int row, int col) {
 		this.row = row;
@@ -25,6 +26,46 @@ public class Square implements Comparable<Square>{
 		setEndLadder(null);
 		snakeLetter = 0;
 		ladderNum = 0;
+		players = new ArrayList<String>();
+	}
+	
+	public boolean movePlayer(String symbol,int amount) {
+		if(amount == 0) {
+			return false;
+		}
+		else {
+			if(isPlayerOn(symbol,0) >= 0) {
+				int index = isPlayerOn(symbol,0);
+				players.remove(index);
+				if(next != null) {
+					next.addPlayer(symbol);
+					return next.movePlayer(symbol, amount--);
+				}
+				else {
+					return true;
+				}
+			}
+			else {
+				return next.movePlayer(symbol, amount);
+			}
+		}
+	}
+	
+	public int isPlayerOn(String symbol,int index) {
+		if(players.size() == 0 || index>players.size()) {
+			return -1;
+		}
+		else {
+			if(players.get(index).equals(symbol)) {
+				return index;
+			}
+			else if(index == players.size()-1){
+				return -1;
+			}
+			else {
+				return isPlayerOn(symbol,index++);
+			}
+		}
 	}
 	
 	public ArrayList<Square> getSquaresInARow(ArrayList<Square> a,int selectedRow){
@@ -144,5 +185,8 @@ public class Square implements Comparable<Square>{
 		this.squareNum = squareNum;
 	}
 	
+	public void addPlayer(String symbol) {
+		players.add(symbol);
+	}
 	
 }
