@@ -8,10 +8,10 @@ public class Board {
 	private int rows;
 	private int cols;
 	private boolean direction;
-	private ArrayList<String> playersSymbol;
+	private Player playersSymbol;
 	
 	public Board(int x,int y) {
-		playersSymbol = new ArrayList<>();
+		playersSymbol = null;
 		setRows(x);
 		setCols(y);
 		direction = true;
@@ -31,30 +31,48 @@ public class Board {
 		
 	}
 	
-	public void setPlayers(String playersString) {
-		
+	public void show() {
+		Square b = null;
+		Square a = first.getSquaresInARow(b, 1);
+		b = a;
+		while(b!= null) {
+			System.out.println(b.getSquareNum());
+			b = b.getNext();
+		}
+		System.out.println("xd");
+	}
+	
+	public void setPlayers(String playersString) {		
 		if(playersString.length() == 1) {
-			playersSymbol.add(playersString);
+			if(playersSymbol == null) {
+				playersSymbol = new Player(playersString);
+			}else {
+				playersSymbol.setNextPlayer(new Player(playersString));
+			}
 		}
 		else {
-			playersString.substring(0, playersString.length()-1);
+			String aux = String.valueOf(playersString.charAt(0));
+			setPlayers(aux);
+			setPlayers(playersString.substring(1, playersString.length()));
 		}
 	}
 	
 	
 	public void showBoard(int requestedRow) {
-		ArrayList<Square> singleRow = new ArrayList<Square>();
+		//ArrayList<Square> singleRow = new ArrayList<Square>();
+		Square singleRow = null;
 		if(first.getRow()==requestedRow) {
-			singleRow.add(first);
 			singleRow = first.getSquaresInARow(singleRow, requestedRow);
-			Collections.sort(singleRow,new Compare());
-			System.out.println(printRow(singleRow));
+			
+			//System.out.println(printRow(singleRow));
+			//show(singleRow);
 			
 		}
 		else {
 			singleRow = first.getSquaresInARow(singleRow, requestedRow);
-			Collections.sort(singleRow,new Compare());
-			System.out.println(printRow(singleRow));
+			
+			//System.out.println(printRow(singleRow));
+			//show(singleRow);
 			
 		}
 	}
@@ -69,13 +87,13 @@ public class Board {
 		}
 	}
 	
-	public String printRow(ArrayList<Square> a) {
+	public String printRow(Square a) {
 		if(a.size()==1) {
-			return "[ " + a.get(0).getSquareNum() + " ]"; 
+			return "[ " + a.getSquareNum() + " ]"; 
 		}
 		else {
-			String x = "[ " + a.get(a.size()-1).getSquareNum() + " ]";
-			a.remove(a.size()-1);
+			String x = "[ " + a.getLast().getSquareNum() + " ]";
+			a.removeLast();
 			return printRow(a) + x;
 		}
 	}

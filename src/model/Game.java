@@ -1,9 +1,8 @@
 package model;
 
-import java.util.ArrayList;
 
 public class Game {
-	private ArrayList<Score> scores;
+	private Score scoresTree;
 	private Board board;
 	
 	public Game() {
@@ -24,5 +23,17 @@ public class Game {
 	
 	public void createBoard(int x,int y) {
 		board = new Board(x,y);
+	}
+	
+	public void showBoard() {
+		board.show();
+	}
+
+	public Score getScoresTree() {
+		return scoresTree;
+	}
+
+	public void setScoresTree(Score scoresTree) {
+		this.scoresTree = scoresTree;
 	}
 }

@@ -13,9 +13,10 @@ public class Main {
 		game = new Game();
 		start();**/
 		
-		String x = "X*^%";
-		String[] p = x.split("", x.length());
-		System.out.println(p[0]  + " " + p[1] + " " + p[2] + " " + p[3]);
+		Game g = new Game();
+		g.createBoard(3, 3);
+		g.showBoard();
+		
 	}
 	
 	public static void showMainMenu() {

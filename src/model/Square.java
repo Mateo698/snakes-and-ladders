@@ -13,7 +13,7 @@ public class Square implements Comparable<Square>{
 	private char snakeLetter;
 	private int ladderNum;
 	private int squareNum;
-	private ArrayList<String> players;
+	private Player players;
 	
 	public Square(int num,int row, int col) {
 		this.row = row;
@@ -26,52 +26,74 @@ public class Square implements Comparable<Square>{
 		setEndLadder(null);
 		snakeLetter = 0;
 		ladderNum = 0;
-		players = new ArrayList<String>();
+		players = null;
 	}
 	
-	public boolean movePlayer(String symbol,int amount) {
+	//ADD return it can be Boolean or the player that won / null
+	public void movePlayer(Player movingP,int amount) {
 		if(amount == 0) {
-			return false;
+			
 		}
 		else {
-			if(isPlayerOn(symbol,0) >= 0) {
-				int index = isPlayerOn(symbol,0);
-				players.remove(index);
-				if(next != null) {
-					next.addPlayer(symbol);
-					return next.movePlayer(symbol, amount--);
+			if(isPlayerOn(players,movingP.getSymbol(),0) >= 0) {
+				int index = isPlayerOn(players,movingP.getSymbol(),0);
+				Player playerToMove = null;
+				if(index == 0) {
+					if(players.getNextPlayer() == null) {
+						playerToMove = players;
+						playerToMove.setNextPlayer(null);
+						players = null;
+						next.addPlayer(playerToMove);
+					}
+					else {
+						Player aux = players.getNextPlayer();
+						playerToMove = players;
+						playerToMove.setNextPlayer(null);
+						players = aux;
+					}
 				}
 				else {
-					return true;
+					playerToMove = players.get(index);
+					players.remove(index);
 				}
+				
+				
 			}
 			else {
-				return next.movePlayer(symbol, amount);
+				if(next == null) {
+					System.out.println("No se encontro al jugador");
+					
+				}
+				else {
+					next.movePlayer(movingP, amount);
+				}
 			}
 		}
 	}
 	
-	public int isPlayerOn(String symbol,int index) {
-		if(players.size() == 0 || index>players.size()) {
+	public int isPlayerOn(Player current,String symbol,int index) {
+		if(current == null) {//caso vacio
 			return -1;
 		}
 		else {
-			if(players.get(index).equals(symbol)) {
+			if(players.getSymbol().equals(symbol)) {
 				return index;
 			}
-			else if(index == players.size()-1){
-				return -1;
-			}
 			else {
-				return isPlayerOn(symbol,index++);
+				return isPlayerOn(current.getNextPlayer(),symbol,index++);
 			}
 		}
 	}
 	
-	public ArrayList<Square> getSquaresInARow(ArrayList<Square> a,int selectedRow){
-		if(next != null) {
+	public Square getSquaresInARow(Square a,int selectedRow){
+		if(next != null) {	
 			if(next.getRow() == selectedRow) {
-				a.add(next);
+				if(a==null) {
+					a = new Square(next.getSquareNum(),next.getRow(),next.getCol());
+				}else {
+					Square aux = new Square(next.getSquareNum(),next.getRow(),next.getCol());
+					a.add(aux);	
+				}
 				return next.getSquaresInARow(a, selectedRow);
 			}
 			else {
@@ -185,8 +207,71 @@ public class Square implements Comparable<Square>{
 		this.squareNum = squareNum;
 	}
 	
-	public void addPlayer(String symbol) {
-		players.add(symbol);
+	public void addPlayer(Player newPlayer) {
+		if(players == null) {
+			players = newPlayer;
+		}else {
+			players.add(newPlayer);
+		}
+	}
+	
+	public int size() {
+		int size = 1;
+		if(next != null) {
+			return next.size(size);
+		}
+		else {
+			return size;
+		}
+	}
+	
+	private int size(int size) {
+		size++;
+		if(next != null) {
+			return next.size(size);
+		}
+		else {
+			return size;
+		}
+	}
+	
+	public Square get(int index) {
+		if(index == 1) {
+			return next;
+		}
+		else {
+			if(next != null) {
+				return next.get(index--);
+			}
+			else {
+				return null;
+			}
+		}
+	}
+	
+	public Square getLast() {
+		if(next.getNext() == null) {
+			return next;
+		}else {
+			return next.getLast();
+		}
+	}
+	
+	public void removeLast() {
+		if(next.getNext() == null) {
+			next = null;
+		}else {
+			next.removeLast();
+		}
+	}
+	
+	public void add(Square a) {
+		if(next == null) {
+			next = a;
+		}
+		else {
+			next.add(a);
+		}
 	}
 	
 }
