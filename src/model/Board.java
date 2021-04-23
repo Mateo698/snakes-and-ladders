@@ -31,15 +31,11 @@ public class Board {
 		
 	}
 	
-	public void show() {
-		Square b = null;
-		Square a = first.getSquaresInARow(b, 1);
-		b = a;
-		while(b!= null) {
-			System.out.println(b.getSquareNum());
-			b = b.getNext();
+	public void show(Square a) {
+		while(a!= null) {
+			System.out.println(a.getSquareNum());
+			a = a.getNext();
 		}
-		System.out.println("xd");
 	}
 	
 	public void setPlayers(String playersString) {		
@@ -62,15 +58,18 @@ public class Board {
 		//ArrayList<Square> singleRow = new ArrayList<Square>();
 		Square singleRow = null;
 		if(first.getRow()==requestedRow) {
+			singleRow = new Square(first.getSquareNum(),first.getRow(),first.getCol());
 			singleRow = first.getSquaresInARow(singleRow, requestedRow);
-			
+			singleRow = sortList(singleRow);
+			System.out.println(printRow(singleRow));
 			//System.out.println(printRow(singleRow));
 			//show(singleRow);
 			
 		}
 		else {
 			singleRow = first.getSquaresInARow(singleRow, requestedRow);
-			
+			singleRow = sortList(singleRow);
+			System.out.println(printRow(singleRow));
 			//System.out.println(printRow(singleRow));
 			//show(singleRow);
 			
@@ -169,4 +168,35 @@ public class Board {
 		this.cols = cols;
 	}
 	
+	public Square sortList(Square a) {
+		if(a.getCol()>a.getNext().getCol()) {
+			Square newList = null;
+			return exchange(a,newList);
+		}
+		else {
+			return a;
+		}
+	}
+	
+	public Square exchange(Square old,Square newList) {
+		if(newList == null) {
+			newList = old.getLast();
+			old.removeLast();
+			return exchange(old,newList);
+		}else {
+			if(old.getNext() == null) {
+				newList.add(old);
+				return newList;
+			}else {
+				Square temp = old.getLast();
+				newList.add(temp);
+				old.removeLast();
+				return exchange(old,newList);
+			}
+		}
+		
+	}
+
+	
+ 
 }

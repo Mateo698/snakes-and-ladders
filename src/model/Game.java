@@ -26,7 +26,7 @@ public class Game {
 	}
 	
 	public void showBoard() {
-		board.show();
+		board.recursiveRows(0);
 	}
 
 	public Score getScoresTree() {

@@ -252,7 +252,8 @@ public class Square implements Comparable<Square>{
 	public Square getLast() {
 		if(next.getNext() == null) {
 			return next;
-		}else {
+		}
+		else {
 			return next.getLast();
 		}
 	}
@@ -273,5 +274,7 @@ public class Square implements Comparable<Square>{
 			next.add(a);
 		}
 	}
+	
+	
 	
 }

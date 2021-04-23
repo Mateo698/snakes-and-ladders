@@ -14,7 +14,7 @@ public class Main {
 		start();**/
 		
 		Game g = new Game();
-		g.createBoard(3, 3);
+		g.createBoard(4, 4);
 		g.showBoard();
 		
 	}
