@@ -3,9 +3,11 @@ package model;
 public class Player {
 	private String symbol;
 	private Player nextPlayer;
+	private int movements;
 	
 	public Player(String s) {
 		setSymbol(s);
+		setMovements(0);
 	}
 
 	public String getSymbol() {
@@ -100,6 +102,31 @@ public class Player {
 	
 	public Player clone() {
 		Player o = new Player(symbol);
+		o.setMovements(movements);
 		return o;
+	}
+
+	public int getMovements() {
+		return movements;
+	}
+
+	public void setMovements(int movements) {
+		this.movements = movements;
+	}
+	
+	public void addMovement(int mov) {
+		movements += mov;
+	}
+	
+	public Player search(String symbol) {
+		if(nextPlayer == null) {
+			return null;
+		}else {
+			if(nextPlayer.getSymbol() == symbol) {
+				return nextPlayer;
+			}else {
+				return nextPlayer.search(symbol);
+			}
+		}
 	}
 }

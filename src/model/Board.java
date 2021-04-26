@@ -32,23 +32,37 @@ public class Board {
 	}
 	
 	public Player startMovement(int moves) {
-		
+		System.out.println("Index to move "+indexPlayerToMove);
 		if(indexPlayerToMove == 0) {
-			Player winPlayer = first.movePlayer(playersSymbol.clone(), moves);			
+			Player winPlayer = first.movePlayer(playersSymbol.clone(), moves);	
+			playersSymbol.addMovement(moves);
+			System.out.println(playersSymbol.getSymbol() + " " + playersSymbol.getMovements());
 			if(winPlayer != null) {
 				indexPlayerToMove = 0;
-				return winPlayer;
+				if(winPlayer.getSymbol() == playersSymbol.getSymbol()) {
+					return playersSymbol.clone();
+				}else {
+					return playersSymbol.search(winPlayer.getSymbol());
+				}
+				
 			}else {
 				indexPlayerToMove++;
 				return null;
 			}
 		}else {
+			playersSymbol.get(indexPlayerToMove).addMovement(moves);
+			
 			Player aux = playersSymbol.get(indexPlayerToMove).clone();
-			System.out.println("a mover" + aux.getSymbol());
+			
+			System.out.println(aux.getSymbol() + " " + aux.getMovements());
 			Player winPlayer = first.movePlayer(aux, moves);
 			if(winPlayer != null) {
 				indexPlayerToMove = 0;
-				return winPlayer;
+				if(winPlayer.getSymbol() == playersSymbol.getSymbol()) {
+					return playersSymbol.clone();
+				}else {
+					return playersSymbol.search(winPlayer.getSymbol());
+				}
 			}else {
 				if(indexPlayerToMove+1 == playersSymbol.size()) {
 					indexPlayerToMove = 0;
@@ -373,5 +387,16 @@ public class Board {
 		}
 		
 	}
-
+	
+	public int getIndex() {
+		return indexPlayerToMove;
+	}
+	
+	public String getPlayerString() {
+		if(indexPlayerToMove == 0) {
+			return playersSymbol.getSymbol();
+		}else {
+			return playersSymbol.get(indexPlayerToMove).getSymbol();
+		}
+	}
 }

@@ -2,6 +2,7 @@ package model;
 
 import java.util.Random;
 import java.util.Scanner;
+import java.util.Timer;
 
 public class Menu {
 	private Score scoresTree;
@@ -20,7 +21,9 @@ public class Menu {
 			if(readInitialData()) {
 				showEnum();
 				startGame();
+				MainMenu();
 			}else {
+				System.out.println("Please type the right data");
 				MainMenu();
 			}
 			
@@ -38,6 +41,14 @@ public class Menu {
 		}
 	}
 	
+	private void seeScores() {
+		if(scoresTree == null) {
+			System.out.println("There are not any scores yet");
+		}else {
+			System.out.println("Scores:\n" + scoresTree.getList());
+		}
+	}
+
 	public void startGame() {
 		String option = in.nextLine();
 		if(option == "" || option.isEmpty()) {
@@ -46,14 +57,32 @@ public class Menu {
 			if(movements == 0) {
 				movements++;
 			}
-			System.out.println("Move " + movements);
-			board.startMovement(movements);
+			String playerString = board.getPlayerString();
+			System.out.println("The player " + playerString + " got "+movements);
+			Player won = board.startMovement(movements);
+			if(won != null) {
+				System.out.println("The player " + won.getSymbol() + " won with" + won.getMovements());
+				System.out.println("Please type the winner's nickname\n");
+				String nick = in.nextLine();
+				int score = won.getMovements()*board.getRows()*board.getCols();
+				if(scoresTree == null) {
+					scoresTree = new Score(nick, won.getSymbol(), score);
+				}else {
+					scoresTree.add(new Score(nick, won.getSymbol(), score));
+				}
+			}else {
+				board.showActual(0);
+				startGame();
+			}
+			
+		}else if(option.contains("num")) {
+			board.recursiveRows(0);
+			in.next();
 			board.showActual(0);
 			startGame();
-		}else if(option.contains("num")) {
-			
 		}else if(option.contains("simul")) {
-			
+			Timer time = new Timer();
+			time.schedule(new Auto(board),0, 5000);
 		}else if(option.contains("menu")){
 			
 		}else {
@@ -62,7 +91,7 @@ public class Menu {
 	}
 	
 	public boolean readInitialData() {
-		System.out.println("Type the number of rows columns snakes ladders and players symbols\n");
+		System.out.println("Type the number of rows, columns, snakes, ladders and players symbols\n");
 		String data = in.nextLine();
 		String[] allData = data.split(data);
 		board = new Board(Integer.parseInt(allData[0]), Integer.parseInt(allData[1]));

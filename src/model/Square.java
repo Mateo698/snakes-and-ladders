@@ -30,16 +30,19 @@ public class Square implements Comparable<Square>{
 	//ADD return it can be Boolean or the player that won / null
 	public Player movePlayer(Player movingP,int amount) {
 		if(amount == 0) {
+			
 			if(initLadder != null) {
 				int index = isPlayerOn(players, movingP.getSymbol(), 0);
-				//System.out.println("remove this " + index);
+				
 				if(players.getNextPlayer() == null) {
+					
 					initLadder.addPlayer(movingP);
 					players = null;
 				}
 				return null;
 			}else if(initSnake != null) {
 				int index = isPlayerOn(players, movingP.getSymbol(), 0);
+				
 				players = null;
 				initSnake.addPlayer(movingP);
 				return null;
@@ -50,7 +53,7 @@ public class Square implements Comparable<Square>{
 		else {
 			if(isPlayerOn(players,movingP.getSymbol(),0) >= 0) {
 				int index = isPlayerOn(players,movingP.getSymbol(),0);
-				//System.out.println("index is this " + index);
+				
 				Player playerToMove = null;
 				if(index == 0) {
 					if(players.getNextPlayer() == null) {
@@ -72,6 +75,7 @@ public class Square implements Comparable<Square>{
 					return playerToMove;
 				}
 				else {
+					
 					next.addPlayer(playerToMove);
 					amount--;
 					return next.movePlayer(movingP, amount);
