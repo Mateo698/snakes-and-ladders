@@ -53,7 +53,8 @@ public class Player {
 				nextPlayer = aux;
 			}
 		}else {
-			nextPlayer.remove(index--);
+			index--;
+			nextPlayer.remove(index);
 		}
 	}
 	
@@ -64,7 +65,8 @@ public class Player {
 			if(nextPlayer == null) {
 				return null;
 			}else {
-				return nextPlayer.get(index--);
+				index--;
+				return nextPlayer.get(index);
 			}
 		}
 	}
@@ -76,5 +78,28 @@ public class Player {
 		else {
 			nextPlayer.add(newPlayer);
 		}
+	}
+	
+	public String getString() {
+		String text = symbol;
+		if(nextPlayer != null) {
+			return nextPlayer.getString(text);
+		}else {
+			return symbol;
+		}
+	}
+	
+	public String getString(String prev) {
+		prev += symbol;
+		if(nextPlayer != null) {
+			return nextPlayer.getString(prev);
+		}else {
+			return prev;
+		}
+	}
+	
+	public Player clone() {
+		Player o = new Player(symbol);
+		return o;
 	}
 }

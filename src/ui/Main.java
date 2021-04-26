@@ -2,20 +2,25 @@ package ui;
 
 import java.util.Scanner;
 
-import model.Game;
+import model.Menu;
 
 public class Main {
 	private static Scanner in;
-	private static Game game;
+	private static Menu game;
 	
 	public static void main(String[] args) {
 		/**in = new Scanner(System.in);
 		game = new Game();
 		start();**/
 		
-		Game g = new Game();
-		g.createBoard(4, 4);
-		g.showBoard();
+		Menu g = new Menu();
+		g.createBoard(5, 5);
+		g.setSnakesAndLadders(2, 2);
+		g.setPlayer("@#$");
+		g.showEnum();
+		System.out.println("");
+		g.showActual();
+		g.startGame();
 		
 	}
 	
