@@ -11,6 +11,7 @@ public class Board {
 	private int ladderCounter;
 	private String snakesCounter;
 	private int indexPlayerToMove;
+	private Player lastWonPlayer; //aux for auto
 	
 	public Board(int x,int y) {
 		playersSymbol = null;
@@ -21,6 +22,7 @@ public class Board {
 		ladderCounter = 1;
 		snakesCounter = "A";
 		indexPlayerToMove = 0;
+		setLastWonPlayer(null);
 	}
 
 	public void show() {
@@ -32,7 +34,6 @@ public class Board {
 	}
 	
 	public Player startMovement(int moves) {
-		System.out.println("Index to move "+indexPlayerToMove);
 		if(indexPlayerToMove == 0) {
 			Player winPlayer = first.movePlayer(playersSymbol.clone(), moves);	
 			playersSymbol.addMovement(moves);
@@ -40,8 +41,10 @@ public class Board {
 			if(winPlayer != null) {
 				indexPlayerToMove = 0;
 				if(winPlayer.getSymbol() == playersSymbol.getSymbol()) {
+					setLastWonPlayer(playersSymbol.clone());
 					return playersSymbol.clone();
 				}else {
+					setLastWonPlayer(playersSymbol.search(winPlayer.getSymbol()));
 					return playersSymbol.search(winPlayer.getSymbol());
 				}
 				
@@ -53,14 +56,15 @@ public class Board {
 			playersSymbol.get(indexPlayerToMove).addMovement(moves);
 			
 			Player aux = playersSymbol.get(indexPlayerToMove).clone();
-			
-			System.out.println(aux.getSymbol() + " " + aux.getMovements());
+
 			Player winPlayer = first.movePlayer(aux, moves);
 			if(winPlayer != null) {
 				indexPlayerToMove = 0;
 				if(winPlayer.getSymbol() == playersSymbol.getSymbol()) {
+					setLastWonPlayer(playersSymbol.clone());
 					return playersSymbol.clone();
 				}else {
+					setLastWonPlayer(playersSymbol.search(winPlayer.getSymbol()));
 					return playersSymbol.search(winPlayer.getSymbol());
 				}
 			}else {
@@ -398,5 +402,13 @@ public class Board {
 		}else {
 			return playersSymbol.get(indexPlayerToMove).getSymbol();
 		}
+	}
+
+	public Player getLastWonPlayer() {
+		return lastWonPlayer;
+	}
+
+	public void setLastWonPlayer(Player lastWonPlayer) {
+		this.lastWonPlayer = lastWonPlayer;
 	}
 }

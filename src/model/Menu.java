@@ -3,6 +3,7 @@ package model;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Timer;
+import java.util.TimerTask;
 
 public class Menu {
 	private Score scoresTree;
@@ -82,7 +83,30 @@ public class Menu {
 			startGame();
 		}else if(option.contains("simul")) {
 			Timer time = new Timer();
-			time.schedule(new Auto(board),0, 5000);
+			TimerTask tt = new TimerTask() {
+				@Override
+				public void run() {
+					Random r = new Random();
+					int movements = r.nextInt(7);
+					if(movements == 0) {
+						movements++;
+					}
+					String playerString = board.getPlayerString();
+					System.out.println("The player " + playerString + " got "+movements);
+					Player won = board.startMovement(movements);
+					if(won != null) {
+						
+						System.out.println(won.getSymbol() + " a ganao con" + won.getMovements());
+						MainMenu();
+						time.cancel();
+						return;
+					}else {
+						board.showActual(0);
+					}
+				}
+			};
+			time.schedule(tt,0, 1000);
+
 		}else if(option.contains("menu")){
 			
 		}else {
