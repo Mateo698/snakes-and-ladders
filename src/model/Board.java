@@ -34,10 +34,10 @@ public class Board {
 	}
 	
 	public Player startMovement(int moves) {
+		System.out.println("Player to move " + indexPlayerToMove);
 		if(indexPlayerToMove == 0) {
 			Player winPlayer = first.movePlayer(playersSymbol.clone(), moves);	
 			playersSymbol.addMovement(moves);
-			System.out.println(playersSymbol.getSymbol() + " " + playersSymbol.getMovements());
 			if(winPlayer != null) {
 				indexPlayerToMove = 0;
 				if(winPlayer.getSymbol() == playersSymbol.getSymbol()) {

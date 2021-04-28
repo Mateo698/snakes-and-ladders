@@ -1,6 +1,7 @@
 package model;
 
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -9,36 +10,57 @@ public class Menu {
 	private Score scoresTree;
 	private Board board;
 	private Scanner in;
+	private boolean leftAuto;
+	private boolean getInAuto;
 	
 	public Menu() {
 		in = new Scanner(System.in);
+		leftAuto = false;
+		getInAuto = false;
 	}
 	
 	public void MainMenu() {
-		System.out.println("Welcome to snakes and ladders\nPlease type the number of a valid option\n");
-		System.out.println("1.Play\n2.Scores\n3.Exit");
-		switch (readOption()) {
-		case 1:
-			if(readInitialData()) {
-				showEnum();
-				startGame();
-				MainMenu();
+		if(leftAuto) {
+			Player won = board.getLastWonPlayer();
+			System.out.println("The player " + won.getSymbol() + " won with " + won.getMovements() );
+			System.out.println("Please type the winner's nickname\n");
+			String nick = in.nextLine();
+			int score = won.getMovements()*board.getRows()*board.getCols();
+			if(scoresTree == null) {
+				scoresTree = new Score(nick, won.getSymbol(), score);
 			}else {
-				System.out.println("Please type the right data");
-				MainMenu();
+				scoresTree.add(new Score(nick, won.getSymbol(), score));
 			}
-			
-			break;
-			
-		case 2:
-			seeScores();
-			break;
-			
-		case 3:
-			break;
+			leftAuto = false;
+			MainMenu();
+		}else {
+			System.out.println("Welcome to snakes and ladders\nPlease type the number of a valid option\n");
+			System.out.println("1.Play\n2.Scores\n3.Exit");
+			switch (readOption()) {
+			case "1":
+				if(readInitialData()) {
+					showEnum();
+					startGame();
+					MainMenu();
+				}else {
+					System.out.println("Please type the right data");
+					MainMenu();
+				}
+				
+				break;
+				
+			case "2":
+				seeScores();
+				MainMenu();
+				break;
+				
+			case "3":
+				break;
 
-		default:
-			break;
+			default:
+				MainMenu();
+				break;
+			}
 		}
 	}
 	
@@ -71,6 +93,7 @@ public class Menu {
 				}else {
 					scoresTree.add(new Score(nick, won.getSymbol(), score));
 				}
+				MainMenu();
 			}else {
 				board.showActual(0);
 				startGame();
@@ -82,33 +105,15 @@ public class Menu {
 			board.showActual(0);
 			startGame();
 		}else if(option.contains("simul")) {
-			Timer time = new Timer();
-			TimerTask tt = new TimerTask() {
-				@Override
-				public void run() {
-					Random r = new Random();
-					int movements = r.nextInt(7);
-					if(movements == 0) {
-						movements++;
-					}
-					String playerString = board.getPlayerString();
-					System.out.println("The player " + playerString + " got "+movements);
-					Player won = board.startMovement(movements);
-					if(won != null) {
-						
-						System.out.println(won.getSymbol() + " a ganao con" + won.getMovements());
-						MainMenu();
-						time.cancel();
-						return;
-					}else {
-						board.showActual(0);
-					}
-				}
-			};
-			time.schedule(tt,0, 1000);
-
+			try {
+				simulation();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			MainMenu();
 		}else if(option.contains("menu")){
-			
+			MainMenu();
 		}else {
 			System.out.println("Please type a correct option");
 		}
@@ -117,8 +122,10 @@ public class Menu {
 	public boolean readInitialData() {
 		System.out.println("Type the number of rows, columns, snakes, ladders and players symbols\n");
 		String data = in.nextLine();
-		String[] allData = data.split(data);
-		board = new Board(Integer.parseInt(allData[0]), Integer.parseInt(allData[1]));
+		String[] allData = data.split(" ");
+		int rows = Integer.parseInt(allData[0]);
+		int cols = Integer.parseInt(allData[1]);
+		board = new Board(rows,cols);
 		if(setSnakesAndLadders(Integer.parseInt(allData[2]), Integer.parseInt(allData[3]))) {
 			setPlayer(allData[4]);
 			board.setPlayersOnBoard();
@@ -129,8 +136,34 @@ public class Menu {
 		
 	}
 	
-	public int readOption() {
-		int option = Integer.parseInt(in.nextLine());
+	public void simulation() throws InterruptedException {
+		Thread.sleep(1000);
+		Random r = new Random();
+		int movements = r.nextInt(7);
+		if(movements == 0) {
+			movements++;
+		}
+		String playerString = board.getPlayerString();
+		System.out.println("The player " + playerString + " got "+movements);
+		Player won = board.startMovement(movements);
+		if(won != null) {
+			System.out.println("The player " + won.getSymbol() + " won with" + won.getMovements());
+			System.out.println("Please type the winner's nickname\n");
+			String nick = in.nextLine();
+			int score = won.getMovements()*board.getRows()*board.getCols();
+			if(scoresTree == null) {
+				scoresTree = new Score(nick, won.getSymbol(), score);
+			}else {
+				scoresTree.add(new Score(nick, won.getSymbol(), score));
+			}
+		}else {
+			board.showActual(0);
+			simulation();
+		}
+	}
+	
+	public String readOption() {
+		String option = in.nextLine();
 		return option;
 	}
 	
