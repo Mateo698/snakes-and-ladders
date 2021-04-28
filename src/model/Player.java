@@ -3,6 +3,11 @@ package model;
 public class Player {
 	private String symbol;
 	private Player nextPlayer;
+	private int rows;
+	private int cols;
+	private int snakes;
+	private int ladders;
+	private String players;
 	private int movements;
 	
 	public Player(String s) {
@@ -128,5 +133,63 @@ public class Player {
 				return nextPlayer.search(symbol);
 			}
 		}
+	}
+
+	public int getRows() {
+		return rows;
+	}
+
+	public void setRows(int rows) {
+		this.rows = rows;
+	}
+
+	public int getCols() {
+		return cols;
+	}
+
+	public void setCols(int cols) {
+		this.cols = cols;
+	}
+
+	/**
+	 * @return the ladders
+	 */
+	public int getLadders() {
+		return ladders;
+	}
+
+	/**
+	 * @param ladders the ladders to set
+	 */
+	public void setLadders(int ladders) {
+		this.ladders = ladders;
+	}
+
+	/**
+	 * @return the snakes
+	 */
+	public int getSnakes() {
+		return snakes;
+	}
+
+	/**
+	 * @param snakes the snakes to set
+	 */
+	public void setSnakes(int snakes) {
+		this.snakes = snakes;
+	}
+
+	/**
+	 * @return the players
+	 */
+	public String getPlayers() {
+		return players;
+	}
+
+	/**
+	 * @param players the players to set
+	 */
+	public void setPlayers(String players) {
+		this.players = players;
 	}
 }

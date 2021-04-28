@@ -33,8 +33,15 @@ public class Board {
 		}
 	}
 	
+	/**
+	* Start the movement of the players through the board in order (moves the first player typed in the menu)
+	* then it adds 1 to the counter to move to let the method know what player moves next 
+	*
+	* @param moves The amount of moves of the player
+	* @return The player that won if its the case, otherwise returns null
+	*/
 	public Player startMovement(int moves) {
-		System.out.println("Player to move " + indexPlayerToMove);
+
 		if(indexPlayerToMove == 0) {
 			Player winPlayer = first.movePlayer(playersSymbol.clone(), moves);	
 			playersSymbol.addMovement(moves);
@@ -78,11 +85,19 @@ public class Board {
 		}
 	}
 	
+	/**
+	* Creates the first square and calls the method to create the whole board
+	*/
 	public void createBoard() {
 		first = new Square(1,rows-1,0);
 		createNext(first);
 	}
-
+	
+	/**
+	* Generates randomly the ladders with amount typed by the user 
+	*
+	* @param ladders The amount of ladders it needs to create
+	*/
 	public void createLadders(int ladders) {
 		if(ladders == 0) {
 			return;
@@ -124,6 +139,11 @@ public class Board {
 		
 	}
 	
+	
+	/**
+	* Generates randomly the amount of snakes typed by the user 
+	*@param snakes Its the amount of snakes to be created
+	*/
 	public void createSnakes(int snakes) {
 		if(snakes == 0) {
 			return;
@@ -164,6 +184,9 @@ public class Board {
 		}
 	}
 	
+	/**
+	* Puts the next letter of the alphabet to the counter for snakes 
+	*/
 	public void plusLetter() {
 		char value = snakesCounter.charAt(0);
 		value++;
@@ -187,6 +210,16 @@ public class Board {
 		}
 	}
 	
+	/**
+	* Checks if the numbers given are proper for the creation of a Snake. Also checks that the number its not out of 
+	* bounds
+	*
+	* @param initRow the number of the row for the start of the snake
+	* @param initCol the number of the column for the start of the snake
+	* @param endRow the number of the row for the end of the snake
+	* @param endCol the number of the column for the end of the snake
+	* @return If the numbers are ok with all the conditions
+	*/
 	public boolean checkSnakes(int initRow, int initCol, int endRow, int endCol) {
 		if(initRow > endRow || initRow == endRow) {
 			return true;
@@ -203,7 +236,11 @@ public class Board {
 		}
 	}
 	
-	
+	/**
+	* Splits up the String with the players's symbols and adds these symbols to the Player linked list
+	*
+	* @param playersString Its the String with all the symbols of the players
+	*/
 	public void setPlayers(String playersString) {
 		if(playersString.length() == 1) {
 			if(playersSymbol == null) {
@@ -219,10 +256,18 @@ public class Board {
 		}
 	}
 	
+	/**
+	*Adds all the players to the first Square for the begining of the game
+	*/
 	public void setPlayersOnBoard(){
 		first.addInitialPlayers(playersSymbol);
 	}
 	
+	/**
+	* Prints the an specified row of the board with the number of the squares, ladders and snakes (without the players)
+	* 
+	* @param requestedRow Its the number of the row that its going to be shown
+	*/
 	public void showBoard(int requestedRow) {
 		Square singleRow = null;
 		if(first.getRow()==requestedRow) {
@@ -238,6 +283,11 @@ public class Board {
 		}
 	}
 	
+	/**
+	* Prints an specified row with the players placed on them, the snakes and the ladders
+	*
+	* @param requestedRow Its the number of the row that its going to be shown
+	*/
 	public void showActualBoard(int requestedRow) {
 		Square singleRow = null;
 		if(first.getRow()==requestedRow) {
@@ -253,6 +303,11 @@ public class Board {
 		}
 	}
 	
+	/**
+	* It calls the method to a row with every row, shows the state with the numbers of the squares, snakes and ladders
+	*
+	* @param rows Its the number of the row to show, it starts ALWAYS with 0
+	*/
 	public void recursiveRows(int rows) {
 		if(rows==this.rows-1) {
 			showBoard(rows);
@@ -263,6 +318,12 @@ public class Board {
 		}
 	}
 	
+	
+	/**
+	* It calls the method to a row with every row, shows the state with the Players of the squares, snakes and ladders
+	*
+	* @param rows Its the number of the row to show, it starts ALWAYS with 0
+	*/
 	public void showActual(int rows) {
 		if(rows==this.rows-1) {
 			showActualBoard(rows);
@@ -273,6 +334,12 @@ public class Board {
 		}
 	}
 	
+	/**
+	* It generates a String of the linked list of the numbers and data of the squares
+	*
+	* @param rows Its the number of the row to show, it starts ALWAYS with 0
+	* @return The generated String
+	*/
 	public String printRow(Square a) {
 		if(a.size()==1) {
 			return "[" + a.getSquareString() + "]"; 
@@ -284,6 +351,12 @@ public class Board {
 		}
 	}
 	
+	/**
+	* It generates the String with info of the squares (without the numbers)
+	*
+	* @param rows Its the number of the row to show, it starts ALWAYS with 0
+	* @return The generated String
+	*/
 	public String printActual(Square a) {
 		if(a.size()==1) {
 			return "[" + a.getSquareCurrent() + "]"; 
@@ -295,6 +368,12 @@ public class Board {
 		}
 	}
 	
+	/**
+	* Creates the whole board, making the next either the one on the right side, or above or on the left, the
+	* first one its the bottom row first column, where the players begin to play normally
+	*
+	* @param prev The square that will get the next square
+	*/
 	public void createNext(Square prev) {
 		if(direction) {
 			if(prev.getCol()+1<cols) {
@@ -363,6 +442,12 @@ public class Board {
 		this.cols = cols;
 	}
 	
+	/**
+	* Check if the linked list with an specified row has its squares in order(based on their columns) 
+	*
+	* @param a Its the linked list with squares of an specified row
+	* @return The linked list itself or calls another method to sort it
+	*/
 	public Square sortList(Square a) {
 		if(a.getCol()>a.getNext().getCol()) {
 			Square newList = null;
@@ -373,6 +458,15 @@ public class Board {
 		}
 	}
 	
+	/**
+	* We need to know that the method that gets all the squares in an specified row adds them in the
+	* order that it founds them, so it will be unsorted sometimes, to sort and to avoid making a pretty
+	* complicated method it just inverts the order of the list, making the last one the first, the one before the
+	* last one the second one, etc. 
+	*
+	* @param old Its the old linked list with the unsorted list
+	* @param newList the new Linked List of Squares with the new Order
+	*/
 	public Square exchange(Square old,Square newList) {
 		if(newList == null) {
 			newList = old.getLast();

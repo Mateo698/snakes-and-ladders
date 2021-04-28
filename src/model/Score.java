@@ -1,6 +1,10 @@
 package model;
 
-public class Score {
+import java.io.Serializable;
+
+public class Score implements Serializable{
+
+	private static final long serialVersionUID = 1;
 	private String nickname;
 	private String symbol;
 	private int score;
@@ -15,6 +19,12 @@ public class Score {
 		setScore(sc);
 	}
 	
+	/**
+	* It returns a String with the scores of the tree going from higher to lower, it goes
+	* through the tree in inorder
+	*
+	* @return The generated String
+	*/
 	public String getList() {
 		if(lowerScore != null && higherScore != null) {
 			String left = lowerScore.getList();

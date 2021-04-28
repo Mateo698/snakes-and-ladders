@@ -27,12 +27,19 @@ public class Square implements Comparable<Square>{
 		players = null;
 	}
 	
-	//ADD return it can be Boolean or the player that won / null
+	/**
+	* Moves the selected player square by square until the number of moves its equal to 0, if the next square
+	* its null and it still has movements then the method returns the player that won 
+	*
+	* @param movingP it's the player that its going to move
+	* @param amount the number of movements in the board
+	* @return The player that won if its the case, otherwise returns null
+	*/
 	public Player movePlayer(Player movingP,int amount) {
 		if(amount == 0) {
 			
 			if(initLadder != null) {
-				int index = isPlayerOn(players, movingP.getSymbol(), 0);
+				isPlayerOn(players, movingP.getSymbol(), 0);
 				
 				if(players.getNextPlayer() == null) {
 					
@@ -41,7 +48,7 @@ public class Square implements Comparable<Square>{
 				}
 				return null;
 			}else if(initSnake != null) {
-				int index = isPlayerOn(players, movingP.getSymbol(), 0);
+				isPlayerOn(players, movingP.getSymbol(), 0);
 				
 				players = null;
 				initSnake.addPlayer(movingP);
@@ -92,6 +99,14 @@ public class Square implements Comparable<Square>{
 		}
 	}
 	
+	/**
+	* Check if the given player its located in this square 
+	*
+	* @param current	The linked list of players located in this square
+	* @param symbol		The symbol of player that its goin to search
+	* @param index 		Its the counter to return the index where the player is located
+	* @return			The index where the player was found if its the case, otherwise returns -1
+	*/
 	public int isPlayerOn(Player current,String symbol,int index) {
 		if(current == null) {
 			return -1;
@@ -108,6 +123,14 @@ public class Square implements Comparable<Square>{
 		}
 	}
 	
+	
+	/**
+	* Get all the Squares in the linked list that are located in the same row (given by Board) 
+	*
+	* @param a 				Its the linked list of Squares where the method will add the requested Squares
+	* @param selectedRow	Its the number of the row that it has to search
+	* @return 				The linked list of Squares with all the squares in the specified row
+	*/
 	public Square getSquaresInARow(Square a,int selectedRow){
 		if(next != null) {	
 			if(next.getRow() == selectedRow) {
@@ -129,7 +152,7 @@ public class Square implements Comparable<Square>{
 		}
 	}
 	
-
+	
 	public Square getInitSnake() {
 		return initSnake;
 	}
@@ -222,7 +245,12 @@ public class Square implements Comparable<Square>{
 	public int compareTo(Square o) {
 		return row-o.getRow();
 	}
-
+	
+	/**
+	* Generates a String with the the number of the square and its attributes (snakes or ladders) 
+	*
+	* @return The generated String
+	*/
 	public String getSquareString() {
 		String x = "";
 		if(ladderNum != 0) {
@@ -251,6 +279,12 @@ public class Square implements Comparable<Square>{
 		return x;
 	}
 	
+	/**
+	* Generates a String with all the players in the square, if its empty returns a String with 3 spaces
+	* to keep the even of the graphic
+	* 
+	* @return The generated String
+	*/
 	public String getSquareCurrent() {
 		String x = "";
 		if(ladderNum != 0) {
